@@ -1,0 +1,119 @@
+{
+    "name": "minimalist",
+    "author": "proximity",
+    "console": "snes",
+    "height": 441,
+    "width": 981,
+    "background": [
+        {
+            "name": "gray",
+            "image": "gray.png"
+        },
+        {
+            "name": "red",
+            "image": "red.png"
+        },
+        {
+            "name": "brown",
+            "image": "brown.png"
+        },
+        {
+            "name": "yellow",
+            "image": "yellow.png"
+        },
+        {
+            "name": "green",
+            "image": "green.png"
+        },
+        {
+            "name": "blue",
+            "image": "blue.png"
+        },
+        {
+            "name": "purple",
+            "image": "purple.png"
+        },
+        {
+            "name": "console",
+            "image": "snes.png"
+        },
+        {
+            "name": "console-alt",
+            "image": "sfc.png"
+        }
+    ],
+    "buttons": [
+        {
+            "name": "b",
+            "image": "circle.png",
+            "x": "729",
+            "y": "290"
+        },
+        {
+            "name": "a",
+            "image": "circle.png",
+            "x": "818",
+            "y": "201"
+        },
+        {
+            "name": "x",
+            "image": "circle.png",
+            "x": "729",
+            "y": "111"
+        },
+        {
+            "name": "y",
+            "image": "circle.png",
+            "x": "639",
+            "y": "201"
+        },
+        {
+            "name": "select",
+            "image": "select.png",
+            "x": "352",
+            "y": "269"
+        },
+        {
+            "name": "start",
+            "image": "select.png",
+            "x": "493",
+            "y": "269"
+        },
+        {
+            "name": "up",
+            "image": "up.png",
+            "x": "164",
+            "y": "111"
+        },
+        {
+            "name": "down",
+            "image": "down.png",
+            "x": "164",
+            "y": "257"
+        },
+        {
+            "name": "left",
+            "image": "left.png",
+            "x": "63",
+            "y": "211"
+        },
+        {
+            "name": "right",
+            "image": "right.png",
+            "x": "209",
+            "y": "211"
+        },
+        {
+            "name": "l",
+            "image": "shoulder.png",
+            "x": "78",
+            "y": "52"
+        },
+        {
+            "name": "r",
+            "image": "shoulder.png",
+            "x": "654",
+            "y": "52"
+        }
+    ]
+}

@@ -1,0 +1,91 @@
+{
+    "name": "minimalist",
+    "author": "proximity/dadinfinitum",
+    "console": "sgb",
+    "height": 441,
+    "width": 1080,
+    "background": [
+        {
+            "name": "gray",
+            "image": "gray.png"
+        },
+        {
+            "name": "red",
+            "image": "red.png"
+        },
+        {
+            "name": "brown",
+            "image": "brown.png"
+        },
+        {
+            "name": "yellow",
+            "image": "yellow.png"
+        },
+        {
+            "name": "green",
+            "image": "green.png"
+        },
+        {
+            "name": "blue",
+            "image": "blue.png"
+        },
+        {
+            "name": "purple",
+            "image": "purple.png"
+        },
+        {
+            "name": "console",
+            "image": "gb.png"
+        }
+    ],
+    "buttons": [
+        {
+            "name": "b",
+            "image": "circle.png",
+            "x": "676",
+            "y": "160"
+        },
+        {
+            "name": "a",
+            "image": "circle.png",
+            "x": "867",
+            "y": "72"
+        },
+        {
+            "name": "select",
+            "image": "select.png",
+            "x": "334",
+            "y": "323"
+        },
+        {
+            "name": "start",
+            "image": "select.png",
+            "x": "523",
+            "y": "323"
+        },
+        {
+            "name": "up",
+            "image": "up.png",
+            "x": "177",
+            "y": "77"
+        },
+        {
+            "name": "down",
+            "image": "down.png",
+            "x": "177",
+            "y": "228"
+        },
+        {
+            "name": "left",
+            "image": "left.png",
+            "x": "73",
+            "y": "180"
+        },
+        {
+            "name": "right",
+            "image": "right.png",
+            "x": "224",
+            "y": "180"
+        }
+    ]
+}

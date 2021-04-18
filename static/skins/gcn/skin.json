@@ -1,0 +1,129 @@
+{
+    "name": "minimalist",
+    "author": "proximity",
+    "console": "gcn",
+    "height": 441,
+    "width": 981,
+    "background": [
+        {
+            "name": "gray",
+            "image": "gray.png"
+        },
+        {
+            "name": "red",
+            "image": "red.png"
+        },
+        {
+            "name": "brown",
+            "image": "brown.png"
+        },
+        {
+            "name": "yellow",
+            "image": "yellow.png"
+        },
+        {
+            "name": "green",
+            "image": "green.png"
+        },
+        {
+            "name": "blue",
+            "image": "blue.png"
+        },
+        {
+            "name": "purple",
+            "image": "purple.png"
+        },
+        {
+            "name": "console",
+            "image": "gamecube.png"
+        }
+    ],
+    "buttons": [
+        {
+            "name": "l",
+            "image": "l.png",
+            "x": "33",
+            "y": "30"
+        },
+        {
+            "name": "r",
+            "image": "r.png",
+            "x": "607",
+            "y": "30"
+        },
+        {
+            "name": "b",
+            "image": "b.png",
+            "x": "681",
+            "y": "305"
+        },
+        {
+            "name": "a",
+            "image": "a.png",
+            "x": "721",
+            "y": "166"
+        },
+        {
+            "name": "y",
+            "image": "y.png",
+            "x": "676",
+            "y": "89"
+        },
+        {
+            "name": "x",
+            "image": "x.png",
+            "x": "874",
+            "y": "168"
+        },
+        {
+            "name": "z",
+            "image": "z.png",
+            "x": "825",
+            "y": "70"
+        },
+        {
+            "name": "start",
+            "image": "start.png",
+            "x": "454",
+            "y": "110"
+        },
+        {
+            "name": "up",
+            "image": "up.png",
+            "x": "358",
+            "y": "249"
+        },
+        {
+            "name": "down",
+            "image": "down.png",
+            "x": "358",
+            "y": "334"
+        },
+        {
+            "name": "left",
+            "image": "left.png",
+            "x": "300",
+            "y": "306"
+        },
+        {
+            "name": "right",
+            "image": "right.png",
+            "x": "387",
+            "y": "306"
+        },
+        {
+            "name": "stick",
+            "image": "stick.png",
+            "x": "117",
+            "y": "137",
+            "range": "40"
+        },
+        {
+            "name": "cstick",
+            "image": "c-stick.png",
+            "x": "541",
+            "y": "291",
+            "range": "30"
+        }
+    ]
+}

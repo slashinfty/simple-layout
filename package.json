@@ -1,0 +1,50 @@
+{
+  "name": "simple-layout",
+  "version": "1.0.0",
+  "description": "Simple Electron stream layout",
+  "main": "main/index.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder -l"
+  },
+  "author": "Matt Braddock",
+  "license": "MIT",
+  "dependencies": {
+    "@types/serialport": "^8.0.1",
+    "electron-rebuild": "^2.3.5",
+    "iso8601-duration": "^1.3.0",
+    "mousetrap": "^1.6.5",
+    "node-fetch": "^2.6.1",
+    "serialport": "^9.0.7",
+    "upath": "^2.0.1",
+    "ws": "^7.4.5"
+  },
+  "devDependencies": {
+    "electron": "^12.0.4",
+    "electron-builder": "^22.10.5"
+  },
+  "build": {
+    "appId": "com.electron.stream-layout",
+    "productName": "Stream Layout",
+    "npmRebuild": false,
+    "files": [
+      "node_modules/**/*",
+      "public/*",
+      "main/*",
+      "static/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist"
+    },
+    "linux": {
+      "category": "game",
+      "icon": "assets/icon_512x512.png",
+      "target": [
+        "deb",
+        "AppImage"
+      ]
+    }
+  }
+}
