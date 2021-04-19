@@ -3,7 +3,7 @@ const skins = require('./skins.js');
 // For setting CSS variables
 const root = document.documentElement;
 
-// Console specific DOM settings
+// chosenConsole specific DOM settings
 const set = {
     "sgb2": {
         "timer": {
@@ -128,27 +128,28 @@ const raceMode = () => {
 }
 
 // Setting up the layout
-const setLayout = async (console = null) => {
-    if (console === null) console = document.getElementById('consoles').value;
+const setLayout = (chosenConsole = null) => {
+    if (chosenConsole === null) chosenConsole = document.getElementById('consoles').value;
     // Clearing everything out
     const allDivs = [...document.querySelectorAll('div:not(.keep)')];
     allDivs.forEach(d => d.innerHTML = d.id !== 'timer' ? '' : '00:00');
     document.getElementById('background').style.display = 'block';
+    console.log(document.getElementById('nincid'));
     
     // Placing game feed red block
     const gamefeed = document.getElementById('gamefeed');
-    gamefeed.style.height = set[console].gamefeed.height + 'px';
-    gamefeed.style.width = set[console].gamefeed.width + 'px';
-    gamefeed.style.left = (1270 - set[console].gamefeed.width) + 'px';
+    gamefeed.style.height = set[chosenConsole].gamefeed.height + 'px';
+    gamefeed.style.width = set[chosenConsole].gamefeed.width + 'px';
+    gamefeed.style.left = (1270 - set[chosenConsole].gamefeed.width) + 'px';
     
     // Controller input display
     const nincid = document.getElementById('nincid');
-    const scaleFactor = set[console].nincid.scale;
+    const scaleFactor = set[chosenConsole].nincid.scale;
     root.style.setProperty('--scale-factor', scaleFactor);
-    const skinobject = skins[console];
+    const skinobject = skins[chosenConsole];
     nincid.style.height = (skinobject.height * scaleFactor) + 'px';
     root.style.setProperty('--left-width', (skinobject.width * scaleFactor) + 'px')
-    const backPath = upath.toUnix(upath.join(__dirname, "../static/skins/", console, '/'));
+    const backPath = upath.toUnix(upath.join(__dirname, "../static/skins/", chosenConsole, '/'));
     const backElement = document.createElement('img');
     backElement.setAttribute('src', backPath + 'back.png');
     nincid.appendChild(backElement);
@@ -167,21 +168,12 @@ const setLayout = async (console = null) => {
     
     // Timer
     const timer = document.getElementById('timer');
-    timer.style.height = set[console].timer.height + 'px';
+    timer.style.height = set[chosenConsole].timer.height + 'px';
     timer.style.lineHeight = getComputedStyle(timer).height;
-    timer.style.fontSize = set[console].timer.minutes;
-
-    // Info
-    const info = document.getElementById('info');
-    info.style.top = (10 + parseFloat(getComputedStyle(timer).height)) + 'px';
-    
-    // Twitch
-    const twitch = document.getElementById('twitch');
-    twitch.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height) + parseFloat(getComputedStyle(info).height))) + 'px';
-    twitch.style.fontSize = set[console].twitch.font;
+    timer.style.fontSize = set[chosenConsole].timer.minutes;
 
     // Racetime
     const racetime = document.getElementById('racetime');
     racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height) + parseFloat(getComputedStyle(info).height))) + 'px';
-    racetime.style.fontSize = set[console].racetime.font;
+    racetime.style.fontSize = set[chosenConsole].racetime.font;
 };

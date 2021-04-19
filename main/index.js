@@ -4,6 +4,7 @@ const createWindow = () => {
     const win = new BrowserWindow({
         webPreferences: {
             nodeIntegration: true,
+            contextIsolation: false,
             enableRemoteModule: true,
             preload: 'preload.js'
         },
@@ -25,7 +26,7 @@ const createWindow = () => {
     });
 
     // Uncomment next line if you need to use dev console
-    //win.webContents.openDevTools();
+    win.webContents.openDevTools();
 }
 
 app.allowRendererProcessReuse = false;
