@@ -8,12 +8,11 @@ const root = document.documentElement;
 const set = {
     "sgb2": {
         "timer": {
-            "minutes": '8em',
-            "hours": '7em',
-            "height": 160
+            "size": '4.6em',
+            "height": 100
         },
-        "twitch": {
-            "font": '1.8em'
+        "camera": {
+            "width": 114
         },
         "racetime": {
             "font": '1.4em'
@@ -28,12 +27,11 @@ const set = {
     },
     "nes": {
         "timer": {
-            "minutes": '9.2em',
-            "hours": '7em',
-            "height": 160
+            "size": '4.2em',
+            "height": 100
         },
-        "twitch": {
-            "font": '1.8em'
+        "camera": {
+            "width": 114
         },
         "racetime": {
             "font": '1.4em'
@@ -48,12 +46,11 @@ const set = {
     },
     "snes": {
         "timer": {
-            "minutes": '9.2em',
-            "hours": '7em',
-            "height": 160
+            "size": '4.2em',
+            "height": 100
         },
-        "twitch": {
-            "font": '1.8em'
+        "camera": {
+            "width": 114
         },
         "racetime": {
             "font": '1.4em'
@@ -68,12 +65,11 @@ const set = {
     },
     "n64": {
         "timer": {
-            "minutes": '6.6em',
-            "hours": '5em',
-            "height": 130
+            "size": '3em',
+            "height": 75
         },
-        "twitch": {
-            "font": '1.3em'
+        "camera": {
+            "width": 86
         },
         "racetime": {
             "font": '0.9em'
@@ -88,12 +84,11 @@ const set = {
     },
     "gcn": {
         "timer": {
-            "minutes": '6.6em',
-            "hours": '5em',
-            "height": 130
+            "size": '3em',
+            "height": 75
         },
-        "twitch": {
-            "font": '1.3em'
+        "camera": {
+            "width": 86
         },
         "racetime": {
             "font": '0.9em'
@@ -167,14 +162,23 @@ const setLayout = (chosenConsole = null) => {
     });
     nincid.appendChild(buttons);
 
-    // Top
-    const top = document.getElementById('top');
-    top.style.height = set[chosenConsole].timer.height + 'px';
-    top.style.lineHeight = getComputedStyle(timer).height;
-    
+    // Camera
+    const camera = document.getElementById('camera');
+    camera.style.width = set[chosenConsole].camera.width + 'px';
+
     // Timer
     const timer = document.getElementById('timer');
-    timer.style.fontSize = set[chosenConsole].timer.minutes;
+    timer.style.fontSize = set[chosenConsole].timer.size;
+    timer.style.height = set[chosenConsole].timer.height + 'px';
+    timer.style.lineHeight = getComputedStyle(timer).height;
+    timer.style.left = (20 + set[chosenConsole].camera.width) + 'px';
+    console.log(1240 - parseFloat(getComputedStyle(camera).width) - parseFloat(getComputedStyle(gamefeed).width));
+    timer.style.maxWidth = (1240 - parseFloat(getComputedStyle(camera).width) - parseFloat(getComputedStyle(gamefeed).width)) + 'px';
+    timer.style.width = getComputedStyle(timer).maxWidth;
+
+    // More camera
+    camera.style.height = getComputedStyle(timer).height;
+    
 
     // Racetime
     const racetime = document.getElementById('racetime');

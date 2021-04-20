@@ -44,15 +44,17 @@ body {
     transform-origin: 0 0;
 }
 
-#top {
-    display: flex;
+#camera {
+    left: 10px;
+    top: 10px;
+    background-color:#FF0000;
 }
 
 #timer {
-    left: 10px;
-    width: var(--left-width);
     text-align: right;
-    color: rgba(0, 0, 0, 0.6);
+    display: inline-block;
+    top: 10px;
+    color: rgba(0, 0, 0, 0.55);
 }
 
 #racetime {
