@@ -1,3 +1,4 @@
+const upath = require('upath');
 const skins = require('./skins.js');
 
 // For setting CSS variables
@@ -7,7 +8,7 @@ const root = document.documentElement;
 const set = {
     "sgb2": {
         "timer": {
-            "minutes": '9.2em',
+            "minutes": '8em',
             "hours": '7em',
             "height": 160
         },
@@ -112,7 +113,6 @@ const raceMode = () => {
         document.getElementById('background').style.backgroundImage = 'none';
         document.getElementById('timer').style.color = 'rgb(255, 255, 255)';
         document.getElementById('timer').style.textShadow = 'none';
-        document.getElementById('info').style.display = 'none';
         document.getElementById('nincid').style.display = 'none';
         document.getElementById('racetime').style.color = 'rgb(255, 255, 255)';
         document.getElementById('racetime').style.textShadow = 'none';
@@ -120,7 +120,6 @@ const raceMode = () => {
         document.getElementById('background').style.background = "url('../static/background.jpg')";
         document.getElementById('timer').style.color = 'rgba(106, 106, 106, 0.65)';
         document.getElementById('timer').style.textShadow = '5px 5px 15px rgba(0, 0, 0, 0.75)';
-        document.getElementById('info').style.display = 'block';
         document.getElementById('nincid').style.display = 'block';
         document.getElementById('racetime').style.color = 'rgba(106, 106, 106, 0.7)';
         document.getElementById('racetime').style.textShadow = '2px 2px 7px rgba(0, 0, 0, 0.55)';
@@ -132,9 +131,11 @@ const setLayout = (chosenConsole = null) => {
     if (chosenConsole === null) chosenConsole = document.getElementById('consoles').value;
     // Clearing everything out
     const allDivs = [...document.querySelectorAll('div:not(.keep)')];
-    allDivs.forEach(d => d.innerHTML = d.id !== 'timer' ? '' : '00:00');
+    allDivs.forEach(d => {
+        console.log(d);
+        d.innerHTML = d.id !== 'timer' ? '' : '1:23:45.6'
+    });
     document.getElementById('background').style.display = 'block';
-    console.log(document.getElementById('nincid'));
     
     // Placing game feed red block
     const gamefeed = document.getElementById('gamefeed');
@@ -165,15 +166,18 @@ const setLayout = (chosenConsole = null) => {
         buttons.appendChild(buttonElement);
     });
     nincid.appendChild(buttons);
+
+    // Top
+    const top = document.getElementById('top');
+    top.style.height = set[chosenConsole].timer.height + 'px';
+    top.style.lineHeight = getComputedStyle(timer).height;
     
     // Timer
     const timer = document.getElementById('timer');
-    timer.style.height = set[chosenConsole].timer.height + 'px';
-    timer.style.lineHeight = getComputedStyle(timer).height;
     timer.style.fontSize = set[chosenConsole].timer.minutes;
 
     // Racetime
     const racetime = document.getElementById('racetime');
-    racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height) + parseFloat(getComputedStyle(info).height))) + 'px';
+    racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height))) + 'px';
     racetime.style.fontSize = set[chosenConsole].racetime.font;
 };
