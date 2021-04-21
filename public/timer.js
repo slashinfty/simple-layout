@@ -148,6 +148,9 @@ class Stopwatch {
             splitCol.innerHTML += `<br><span id="split` + count + `">` + this.format(this.msToArray(split.pb)) + `</span>`;
             saveCol.innerHTML += `<br><span id="save` + count + `">` + this.format(this.msToArray(split.seg - split.best)) + `</span>`;
         });
+        const racetime = document.getElementById('racetime');
+        racetime.style.top = (10 + parseFloat(getComputedStyle(document.getElementById('splits')).top) + parseFloat(getComputedStyle(split).height)) + 'px';
+        racetime.style.height = (parseFloat(getComputedStyle(document.getElementById('nincid')).top) - parseFloat(getComputedStyle(racetime).top) - 10) + 'px';
     }
 
     export() {

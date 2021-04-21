@@ -179,14 +179,13 @@ const setLayout = (chosenConsole = null) => {
 
     // Racetime
     const racetime = document.getElementById('racetime');
-    racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height))) + 'px';
     racetime.style.fontSize = set[chosenConsole].racetime.font;
 
     // Splits
     const splits = document.getElementById('splits');
     splits.style.fontSize = getComputedStyle(racetime).fontSize;
     splits.style.top = (20 + parseFloat(getComputedStyle(timer).height)) + 'px';
-    
+
     stopwatch = new Stopwatch(
         document.getElementById('timer'),
         {

@@ -95,7 +95,6 @@ body {
 
 #racetime {
     left: 10px;
-    top: 250px;
     width: var(--left-width);
     display: flex;
     justify-content: center;
@@ -115,39 +114,6 @@ body {
 #right-rtgg {
     left: 50%;
     text-align: right;
-}
-
-#twitch {
-    left: 10px;
-    top: 250px;
-    width: var(--left-width);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-}
-
-#twitch p {
-    position: absolute;
-    width: 100%;
-    animation: fadeinout 6s linear forwards;
-}
-
-@keyframes fadeinout {
-    0%,100% { opacity: 0; }
-    50% { opacity: 1; }
-}
-
-.blue {
-    color: rgba(97, 163, 241, 0.7) !important;
-}
-
-.twitch-message {
-    color: rgba(166, 166, 166, 0.7);
-}
-
-.pink {
-    color: rgba(174, 61, 153, 0.7) !important;
 }
 
 #settings {
