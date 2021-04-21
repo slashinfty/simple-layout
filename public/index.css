@@ -58,40 +58,39 @@ body {
 }
 
 #splits {
-    border-collapse: collapse;
     width: var(--left-width);
-    min-width: var(--left-width);
+    left: 10px;
     font-size: 1.2em;
+    display: flex;
+    justify-content: center;
+    color: rgba(0, 0, 0, 0.55);
 }
 
-thead {
-    display: block;
-    width: 100%;
+#splits div {
+    position: absolute;
 }
 
-tbody {
-    display: block;
-    width: 100%;
+#name {
+    left: 0%;
+    width: 40%;
 }
 
-tr {
-    display: table;
-    width: 100%;
-}
-
-.longcell {
-    width: 46%;
-    min-width: 46%;
-}
-
-.shortcell {
-    width: 18%;
-    min-width: 18%;
+#delta {
+    left: 40%;
+    width: 20%;
     text-align: right;
 }
 
-thead > tr:first-child {
-    border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+#split {
+    left: 60%;
+    width: 23%;
+    text-align: right;
+}
+
+#save {
+    left: 83%;
+    width: 17%;
+    text-align: right;
 }
 
 #racetime {
@@ -101,8 +100,7 @@ thead > tr:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
-    color: rgba(106, 106, 106, 0.7);
-    text-shadow: 2px 2px 7px rgba(0, 0, 0, 0.55);
+    color: rgba(0, 0, 0, 0.55);
 }
 
 #racetime div {

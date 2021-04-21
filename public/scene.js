@@ -15,7 +15,7 @@ const set = {
             "width": 114
         },
         "racetime": {
-            "font": '1.4em'
+            "font": '1.2em'
         },
         "nincid": {
             "scale": 472 / 1080
@@ -34,7 +34,7 @@ const set = {
             "width": 114
         },
         "racetime": {
-            "font": '1.4em'
+            "font": '1em'
         },
         "nincid": {
             "scale": 450 / 1080
@@ -53,7 +53,7 @@ const set = {
             "width": 114
         },
         "racetime": {
-            "font": '1.4em'
+            "font": '1em'
         },
         "nincid": {
              "scale": 450 / 981
@@ -72,7 +72,7 @@ const set = {
             "width": 86
         },
         "racetime": {
-            "font": '0.9em'
+            "font": '0.8em'
         },
         "nincid": {
             "scale": 317 / 981
@@ -91,7 +91,7 @@ const set = {
             "width": 86
         },
         "racetime": {
-            "font": '0.9em'
+            "font": '0.8em'
         },
         "nincid": {
              "scale": 317 / 981
@@ -176,6 +176,16 @@ const setLayout = (chosenConsole = null) => {
 
     // More camera
     camera.style.height = getComputedStyle(timer).height;
+
+    // Racetime
+    const racetime = document.getElementById('racetime');
+    racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height))) + 'px';
+    racetime.style.fontSize = set[chosenConsole].racetime.font;
+
+    // Splits
+    const splits = document.getElementById('splits');
+    splits.style.fontSize = getComputedStyle(racetime).fontSize;
+    splits.style.top = (20 + parseFloat(getComputedStyle(timer).height)) + 'px';
     
     stopwatch = new Stopwatch(
         document.getElementById('timer'),
@@ -222,9 +232,4 @@ const setLayout = (chosenConsole = null) => {
             ]
         }
     );
-
-    // Racetime
-    const racetime = document.getElementById('racetime');
-    racetime.style.height = (680 - (parseFloat(getComputedStyle(nincid).height) + parseFloat(getComputedStyle(timer).height))) + 'px';
-    racetime.style.fontSize = set[chosenConsole].racetime.font;
 };

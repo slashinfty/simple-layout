@@ -133,52 +133,21 @@ class Stopwatch {
     }
 
     load() {
-        const table = document.getElementById('splits');
-        const splitsTable = new DocumentFragment();
-        const header = document.createElement('thead');
-        const headerRow = document.createElement('tr');
-        const gameName = document.createElement('th');
-        gameName.innerText = this.splits.name;
-        headerRow.appendChild(gameName);
-        const deltaHead = document.createElement('th');
-        deltaHead.innerText = 'Delta';
-        headerRow.appendChild(deltaHead);
-        const splitHead = document.createElement('th');
-        splitHead.innerText = 'Split';
-        headerRow.appendChild(splitHead);
-        const saveHead = document.createElement('th');
-        saveHead.innerText = 'Save';
-        headerRow.appendChild(saveHead);
-        header.appendChild(headerRow);
-        const body = document.createElement('tbody');
+        const nameCol = document.getElementById('name');
+        const deltaCol = document.getElementById('delta');
+        const splitCol = document.getElementById('split');
+        const saveCol = document.getElementById('save');
+        nameCol.innerHTML = this.splits.name;
+        deltaCol.innerHTML = 'Delta';
+        splitCol.innerHTML = 'Split';
+        saveCol.innerHTML = 'Save';
         this.splits.splits.forEach((split, index) => {
             const count = index + 1;
-            const row = document.createElement('tr');
-            const name = document.createElement('td');
-            name.setAttribute('id', 'name' + count);
-            name.innerText = splits.name;
-            name.setAttribute('class', 'longcell');
-            row.appendChild(name);
-            const delta = document.createElement('td');
-            delta.setAttribute('id', 'delta' + count);
-            delta.setAttribute('class', 'shortcell');
-            delta.innerHTML = '&nbsp;'
-            row.appendChild(delta);
-            const time = document.createElement('td');
-            time.setAttribute('id', 'split' + count);
-            time.innerText = this.format(this.msToArray(split.pb));
-            time.setAttribute('class', 'shortcell');
-            row.appendChild(time);
-            const save = document.createElement('td');
-            save.setAttribute('id', 'save' + count);
-            save.innerText = this.format(this.msToArray(split.seg - split.best));
-            save.setAttribute('class', 'shortcell');
-            save.innerHTML = '&nbsp;'
-            body.appendChild(row);
+            nameCol.innerHTML += `<br><span id="name` + count + `">` + split.name + `</span>`;
+            deltaCol.innerHTML += `<br><span id="delta` + count + `">&nbsp;</span>`;
+            splitCol.innerHTML += `<br><span id="split` + count + `">` + this.format(this.msToArray(split.pb)) + `</span>`;
+            saveCol.innerHTML += `<br><span id="save` + count + `">` + this.format(this.msToArray(split.seg - split.best)) + `</span>`;
         });
-        splitsTable.appendChild(header);
-        splitsTable.appendChild(body);
-        table.appendChild(splitsTable);
     }
 
     export() {
