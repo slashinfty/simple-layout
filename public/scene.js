@@ -103,24 +103,6 @@ const set = {
     }
 };
 
-const raceMode = () => {
-    if (document.getElementById('race-mode').checked) {
-        document.getElementById('background').style.backgroundImage = 'none';
-        document.getElementById('timer').style.color = 'rgb(255, 255, 255)';
-        document.getElementById('timer').style.textShadow = 'none';
-        document.getElementById('nincid').style.display = 'none';
-        document.getElementById('racetime').style.color = 'rgb(255, 255, 255)';
-        document.getElementById('racetime').style.textShadow = 'none';
-    } else {
-        document.getElementById('background').style.background = "url('../static/background.jpg')";
-        document.getElementById('timer').style.color = 'rgba(106, 106, 106, 0.65)';
-        document.getElementById('timer').style.textShadow = '5px 5px 15px rgba(0, 0, 0, 0.75)';
-        document.getElementById('nincid').style.display = 'block';
-        document.getElementById('racetime').style.color = 'rgba(106, 106, 106, 0.7)';
-        document.getElementById('racetime').style.textShadow = '2px 2px 7px rgba(0, 0, 0, 0.55)';
-    }
-}
-
 // Setting up the layout
 const setLayout = (chosenConsole = null) => {
     if (chosenConsole === null) chosenConsole = document.getElementById('consoles').value;
@@ -185,50 +167,4 @@ const setLayout = (chosenConsole = null) => {
     const splits = document.getElementById('splits');
     splits.style.fontSize = getComputedStyle(racetime).fontSize;
     splits.style.top = (20 + parseFloat(getComputedStyle(timer).height)) + 'px';
-
-    stopwatch = new Stopwatch(
-        document.getElementById('timer'),
-        {
-            "name": "SMW - No Starworld",
-            "delay": 2200,
-            "splits": [
-                {
-                    "name": "Iggy",
-                    "pb": 193932,
-                    "seg": 193932,
-                    "best": 193265
-                },
-                {
-                    "name": "Morton",
-                    "pb": 518597,
-                    "seg": 324665,
-                    "best": 308781
-                },
-                {
-                    "name": "Ludwig",
-                    "pb": 1014955,
-                    "seg": 496358,
-                    "best": 493981
-                },
-                {
-                    "name": "Roy",
-                    "pb": 1290261,
-                    "seg": 275306,
-                    "best": 257712
-                },
-                {
-                    "name": "Wendy",
-                    "pb": 1698370,
-                    "seg": 408109,
-                    "best": 408109
-                },
-                {
-                    "name": "Bowser",
-                    "pb": 2305276,
-                    "seg": 606906,
-                    "best": 568239
-                }
-            ]
-        }
-    );
 };

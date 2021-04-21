@@ -1,26 +1,14 @@
 const iso = require('iso8601-duration');
 const fetch = require('node-fetch');
+const schedule = require('node-schedule');
 const WebSocket = require('ws');
 var currentRace;
-
-// Determine if showing race info or Twitch chat
-const middleRadioCheck = () => {
-    const middleRadio = document.querySelector('input[name="middlebox"]:checked');
-
-    // Stop monitoring race data
-    if (middleRadio.value === 'twitch') {
-        document.getElementById('startTimer').disabled = false;
-        document.getElementById('pauseTimer').disabled = false;
-        document.getElementById('resetTimer').disabled = false;
-        if (currentRace !== undefined) currentRace.close();
-    }
-}
 
 class RaceRoom {
     constructor (raceName, wsURL) {
         this.name = raceName;
         this.connection = new WebSocket(wsURL);
-        this.timer;
+        this.started = false;
         const room = this;
 
         this.connection.onopen = function() {
@@ -29,19 +17,22 @@ class RaceRoom {
 
         this.connection.onmessage = function(obj) {
             const data = JSON.parse(obj.data);
-            console.log(data);
             if (data.type === 'error') {
                 data.errors.forEach(e => console.error(e));
                 return;
             }
             if (data.type === 'race.data') {
-                if (data.race.status.value !== 'in_progress') {
-                    document.getElementById("timer").innerHTML = '00:00';
-                    if (data.race.status.value === 'finished' || data.race.status.value === 'cancelled') {
-                        clearInterval(this.timer);
-                        room.connection.close();
+                console.log(data.race.status.value + ' --- ' + data.race.started_at);
+                if (data.race.status.value === 'in_progress' || data.race.status.value === 'pending') {
+                    if (!this.started) {
+                        this.started = true;
+                        const start = new Date(data.race.started_at);
+                        const job = schedule.scheduleJob(start, () => stopwatch.start());
                     }
-                } else if (room.timer === undefined) room.timer = setInterval(room.updateTime, 1000, data.race.started_at);
+                } else if (data.race.status.value === 'finished' || data.race.status.value === 'cancelled') {
+                    stopwatch.stop();
+                    return;
+                }
                 let leftInfo = '';
                 let rightInfo = '';
                 for (let i = 0; i < Math.min(data.race.entrants.length, 9); i++) {
@@ -79,19 +70,15 @@ class RaceRoom {
                 }
                 document.getElementById('left-rtgg').innerHTML = leftInfo;
                 document.getElementById('right-rtgg').innerHTML = rightInfo;
-                console.log(room.startTime);
-                console.log(room.timer);
+                const self = data.race.entrants.find(e => e.user.name === 'slashinfty');
+                if (self === undefined) return;
+                if (self.status.value === 'done' && stopwatch.running) stopwatch.start();
             }
         }
 
         this.close = function() {
-            clearInterval(this.timer);
             document.getElementById('left-rtgg').innerHTML = '';
             document.getElementById('right-rtgg').innerHTML = '';
-            timer.style.height = set[document.getElementById('consoles').value].timer.height + 'px';
-            timer.style.lineHeight = getComputedStyle(timer).height;
-            timer.style.fontSize = set[document.getElementById('consoles').value].timer.minutes;
-            timer.innerHTML = '00:00';
             room.connection.close();
         }
     }
@@ -127,32 +114,26 @@ class RaceRoom {
 }
 
 const getRace = async () => {
-    const raceSearch = await fetch ('https://racetime.gg/races/data');
-    const races = await raceSearch.json();
-    if (races.races.length === 0) return;
-    else {
-        for (let i = 0; i < races.races.length; i++) {
-            const race = races.races[i];
-            const raceUrl = race.data_url;
-            const lookupSearch = await fetch (`https://racetime.gg${raceUrl}`);
-            const lookup = await lookupSearch.json();
-            console.log(lookup);
-            const found = lookup.entrants.find(e => e.user.name === document.getElementById('race').value);
-            console.log(found);
-            if (found !== undefined) {
-                currentRace = new RaceRoom(lookup.name, new URL(lookup.websocket_url, 'wss://racetime.gg'));
-                break;
-            }
-        }
+    const racetime = document.getElementById('racetime');
+    racetime.style.top = (10 + parseFloat(getComputedStyle(document.getElementById('splits')).top) + parseFloat(getComputedStyle(document.getElementById('split')).height)) + 'px';
+    racetime.style.height = (parseFloat(getComputedStyle(document.getElementById('nincid')).top) - parseFloat(getComputedStyle(racetime).top) - 10) + 'px';
+    const raceSearch = await fetch ('https://racetime.gg/' + document.getElementById('race').value + '/data');
+    try {
+        const race = await raceSearch.json();
+        currentRace = new RaceRoom(race.name, new URL(race.websocket_url, 'wss://racetime.gg'));
+    } catch (err) {
+        console.error(err);
+        return;
     }
-    document.getElementById('startTimer').disabled = true;
     document.getElementById('pauseTimer').disabled = true;
     document.getElementById('resetTimer').disabled = true;
 }
 
 const closeRace = async () => {
-    document.getElementById('startTimer').disabled = false;
     document.getElementById('pauseTimer').disabled = false;
     document.getElementById('resetTimer').disabled = false;
-    if (currentRace !== undefined) currentRace.close();
+    if (currentRace !== undefined) {
+        currentRace.close();
+        currentRace = undefined;
+    }
 }

@@ -1,42 +1,34 @@
 const Mousetrap = require('mousetrap');
-/*
-let startTime, updatedTime, difference, tInterval, savedTime;
-let paused = 0;
-let running = 0;
-*/
+const { dialog } = require('electron').remote;
+const fs = require('fs');
 
-/*
-// Set up hotkeys
 document.addEventListener("DOMContentLoaded", () => {
-    Mousetrap.bind('\\', () => {
-        if (document.querySelector('input[name="middlebox"]:checked').value === 'racetime') return;
-        if (!running){
-            startTime = new Date().getTime();
-            tInterval = setInterval(getShowTime, 1000);
-            paused = 0;
-            running = 1;
-        } else if (!paused) {
-            clearInterval(tInterval);
-            savedTime = difference;
-            paused = 1;
-            running = 0;
-        }
-    }, 'keyup');
+    Mousetrap.bind('f1', () => {
+        if (stopwatch === undefined) return;
+        stopwatch.start();
+    });
+
+    Mousetrap.bind('f4', () => {
+        if (stopwatch === undefined || document.getElementById('pauseTimer').disabled) return;
+        stopwatch.stop();
+    });
     
-    Mousetrap.bind('`', () => {
-        if (document.querySelector('input[name="middlebox"]:checked').value === 'racetime') return;
-        reset();
-    }, 'keyup');
+    Mousetrap.bind('f8', () => {
+        if (stopwatch === undefined || document.getElementById('resetTimer').disabled) return;
+        stopwatch.reset();
+    });
 });
-*/
-var stopwatch;
+
+var stopwatch, splitsFile;
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 class Stopwatch {
-    constructor(display, file) {
+    constructor(display, file, path) {
         this.running = false;
+        this.finished = false;
         this.display = display;
         this.splits = file;
+        this.path = path;
         this.delay = this.splits.delay;
         this.currentSplits = [];
         this.currentSegments = [];
@@ -45,43 +37,50 @@ class Stopwatch {
     }
     
     reset() {
-        if (this.running) !this.running;
+        if (this.running) this.running = false;
         this.times = [ 0, 0, 0, 0 ];
         this.segment = 0;
+        this.finished = false;
         this.print(this.times);
         this.load(this.splits);
     }
     
     async start() {
+        if (this.finished) return;
         if (this.times.every(t => t === 0)) await delay(this.delay);
         if (!this.time) this.time = performance.now();
         if (!this.running) {
             this.segment++;
             this.running = true;
             requestAnimationFrame(this.step.bind(this));
+        } else {
+            let times = this.times;
+            // Set split time
+            document.getElementById('split' + this.segment).innerText = this.format(times);
+            // Get ms and store it
+            const ms = this.arrayToMS(times);
+            this.currentSplits.push(ms);
+            // Get delta
+            const pb = this.splits.splits[this.segment - 1].pb;
+            const delta = pb === null ? '---' : ms <= pb ? '-' + this.format(this.msToArray(pb - ms)) : '+' + this.format(this.msToArray(ms - pb));
+            document.getElementById('delta' + this.segment).innerText = delta;
+            // Get time save
+            const pbSeg = this.splits.splits[this.segment - 1].seg;
+            let save;
+            if (pbSeg === null) save = '---';
+            else {
+                const lastTime = this.segment === 1 ? 0 : this.currentSplits[this.segment - 2];
+                const seg = ms - lastTime;
+                this.currentSegments.push(seg);
+                save = seg <= pbSeg ? '-' + this.format(this.msToArray(pbSeg - seg)) : '+' + this.format(this.msToArray(seg - pbSeg));
+            }
+            document.getElementById('save' + this.segment).innerText = save;
+            if (this.segment === this.splits.splits.length) {
+                this.finished = true;
+                this.stop();
+            }
+            else this.segment++;
         }
-    }
-    
-    split() {
-        let times = this.times;
-        // Set split time
-        document.getElementById('split' + this.segment).innerText = this.format(times);
-        // Get ms and store it
-        const ms = this.arrayToMS(times);
-        this.currentSplits.push(ms);
-        // Get delta
-        const pb = this.splits.splits[this.segment - 1].pb;
-        const delta = ms <= pb ? pb - ms : ms - pb;
-        document.getElementById('delta' + this.segment).innerText = ms <= pb ? '-' + this.format(this.msToArray(delta)) : '+' + this.format(this.msToArray(delta));
-        // Get time save
-        const pbSeg = this.splits.splits[this.segment - 1].seg;
-        const lastTime = this.segment === 1 ? 0 : this.currentSplits[this.segment - 2];
-        const seg = ms - lastTime;
-        this.currentSegments.push(seg);
-        const save = seg <= pbSeg ? pbSeg - seg : seg - pbSeg;
-        document.getElementById('save' + this.segment).innerText = seg <= pbSeg ? '-' + this.format(this.msToArray(save)) : '+' + this.format(this.msToArray(save));
-        if (this.segment === this.splits.splits.length) this.stop();
-        else this.segment++;
     }
     
     stop() {
@@ -90,16 +89,15 @@ class Stopwatch {
     }
 
     saveBest() {
-        this.splits.splits.forEach((s, i) => s.best = this.currentSegments[i] < s.best ? this.currentSegments[i] : s.best);
+        this.splits.splits.forEach((s, i) => s.best = this.currentSegments[i] < s.best || s.best === null ? this.currentSegments[i] : s.best);
     }
 
     savePB() {
         if (this.segment !== this.splits.splits.length) return;
-        console.log(this.currentSegments);
         this.splits.splits.forEach((s, i) => {
             s.pb = this.currentSplits[i];
             s.seg = this.currentSegments[i];
-            if (s.seg < s.best) s.best = s.seg;
+            if (s.seg < s.best || s.best === null) s.best = s.seg;
         });
     }
     
@@ -133,21 +131,25 @@ class Stopwatch {
     }
 
     load() {
-        const nameCol = document.getElementById('name');
-        const deltaCol = document.getElementById('delta');
-        const splitCol = document.getElementById('split');
-        const saveCol = document.getElementById('save');
-        nameCol.innerHTML = this.splits.name;
-        deltaCol.innerHTML = 'Delta';
-        splitCol.innerHTML = 'Split';
-        saveCol.innerHTML = 'Save';
-        this.splits.splits.forEach((split, index) => {
-            const count = index + 1;
-            nameCol.innerHTML += `<br><span id="name` + count + `">` + split.name + `</span>`;
-            deltaCol.innerHTML += `<br><span id="delta` + count + `">&nbsp;</span>`;
-            splitCol.innerHTML += `<br><span id="split` + count + `">` + this.format(this.msToArray(split.pb)) + `</span>`;
-            saveCol.innerHTML += `<br><span id="save` + count + `">` + this.format(this.msToArray(split.seg - split.best)) + `</span>`;
-        });
+        if (this.splits.splits.length !== 0) {
+            const nameCol = document.getElementById('name');
+            const deltaCol = document.getElementById('delta');
+            const splitCol = document.getElementById('split');
+            const saveCol = document.getElementById('save');
+            nameCol.innerHTML = this.splits.name;
+            deltaCol.innerHTML = 'Delta';
+            splitCol.innerHTML = 'Split';
+            saveCol.innerHTML = 'Save';
+            this.splits.splits.forEach((split, index) => {
+                const count = index + 1;
+                nameCol.innerHTML += `<br><span id="name` + count + `">` + split.name + `</span>`;
+                deltaCol.innerHTML += `<br><span id="delta` + count + `">&nbsp;</span>`;
+                const splitColContent = split.pb === null ? '---' : this.format(this.msToArray(split.pb));
+                splitCol.innerHTML += `<br><span id="split` + count + `">` + splitColContent + `</span>`;
+                const saveColContent = split.seg === null ? '&nbsp;' : this.format(this.msToArray(split.seg - split.best));
+                saveCol.innerHTML += `<br><span id="save` + count + `">` + saveColContent + `</span>`;
+            });
+            }
         const racetime = document.getElementById('racetime');
         racetime.style.top = (10 + parseFloat(getComputedStyle(document.getElementById('splits')).top) + parseFloat(getComputedStyle(split).height)) + 'px';
         racetime.style.height = (parseFloat(getComputedStyle(document.getElementById('nincid')).top) - parseFloat(getComputedStyle(racetime).top) - 10) + 'px';
@@ -155,9 +157,8 @@ class Stopwatch {
 
     export() {
         if (this.running) return;
-        const blob = new Blob([JSON.stringify(this.splits)], {type: 'application/json'});
-        const saveAs = window.saveAs;
-        saveAs(blob, 'splits.json');
+        fs.writeFileSync(this.path, JSON.stringify(this.splits));
+        alert('Saved splits at ' + this.path);
     }
 
     msToArray(perf) {
@@ -204,60 +205,24 @@ class Stopwatch {
     }
 }
 
-/*
-// Start the timer
-const start = () => {
-    if (!running) {
-        startTime = new Date().getTime();
-        tInterval = setInterval(getShowTime, 1000);
-        paused = 0;
-        running = 1;
+const importSplits = () => {
+    const path = dialog.showOpenDialogSync({
+        "title": "Select JSON File",
+        "properties": [
+            "openFile"
+        ],
+        "filters": [
+            { "name": "JavaScript Object Notation", "extensions": ['json']}
+        ]
+    })[0];
+    if (!fs.existsSync(path)) {
+        dialog.showErrorBox("Error Loading Splits", "Can not find " + path);
+        return;
     }
-};
-
-// Pause the timer
-const pause = () => {
-    if (!difference) {}
-    else if (!paused) {
-        clearInterval(tInterval);
-        savedTime = difference;
-        paused = 1;
-        running = 0;
-    } else {
-    start();
-    }
-};
-
-// Reset the timer
-const reset = () => {
-    clearInterval(tInterval);
-    savedTime = 0;
-    difference = 0;
-    paused = 0;
-    running = 0;
-    const timer = document.getElementById('timer');
-    timer.style.height = set[document.getElementById('consoles').value].timer.height + 'px';
-    timer.style.lineHeight = getComputedStyle(timer).height;
-    timer.style.fontSize = set[document.getElementById('consoles').value].timer.minutes;
-    timer.innerHTML = '00:00'
-};
-
-// Display time
-const getShowTime = () => {
-    updatedTime = new Date().getTime();
-    if (savedTime) difference = (updatedTime - startTime) + savedTime;
-    else difference =  updatedTime - startTime;
-    var seconds = Math.floor(difference / 1000);
-    let time;
-    if (seconds >= 3600) {
-        const timer = document.getElementById('timer');
-        timer.style.height = set[document.getElementById('consoles').value].timer.height + 'px';
-        timer.style.lineHeight = getComputedStyle(timer).height;
-        timer.style.fontSize = set[document.getElementById('consoles').value].timer.hours;
-        time = Math.floor(seconds / 3600) + ':' + ('0' + Math.floor((seconds % 3600) / 60)).slice(-2) + ':' + ('0' + (seconds % 60)).slice(-2);
-    } else {
-        time = ('0' + Math.floor(seconds / 60)).slice(-2) + ':' + ('0' + (seconds % 60)).slice(-2);
-    }
-    document.getElementById("timer").innerHTML = time;
+    const raw = fs.readFileSync(path);
+    stopwatch = new Stopwatch(
+        document.getElementById('timer'),
+        JSON.parse(raw),
+        path
+    );
 }
-*/

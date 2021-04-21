@@ -14,7 +14,7 @@
 <body>
     <div id="background" class="keep" style="display: none;">
         <div id="camera"></div>
-        <div id="timer" class="keep">1:23:45.6</div>
+        <div id="timer" class="keep"></div>
         <div id="splits" class="keep">
             <div id="name" class="keep"></div>
             <div id="delta" class="keep"></div>
@@ -42,34 +42,25 @@
             <label for="port-select">Select Port: </label>
             <select id="port-select"></select>
             <button id="scan-button" onclick="scanPorts();">Scan Ports</button>
-            <input type="checkbox" name="race-mode" id="race-mode" onchange="raceMode();" />
-            <label for="race-mode">Race Mode?</label>
         </p>
         <p>
-            <label for="game">Game: </label>
-            <input type="text" id="game" />
-            <label for="category">Category: </label>
-            <input type="text" id="category" />
-            <label for="subcategories">Subcategories: </label>
-            <input type="text" id="subcategories" />
-            <button id="srcQuery" onclick="srcLookup();">Get Info</button>
+            Timer controls:&nbsp;
+            <button id="startTimer" onclick="stopwatch.start();">Start/Split</button>&nbsp;
+            <button id="pauseTimer" onclick="stopwatch.stop();">Pause</button>&nbsp;
+            <button id="resetTimer" onclick="stopwatch.reset()">Reset</button>&nbsp;
+            Start/Split: F1 &nbsp; Pause: F4 &nbsp; Reset: F8
         </p>
         <p>
-            <label for="name">Twitch: </label>
-            <input type="text" id="name" value="dadinfinitum" />
-            <input type="radio" name="middlebox" value="twitch" id="twitchRadio" checked="checked" onchange="middleRadioCheck();" />
-            <label for="twitchRadio">Twitch Chat</label>
-            <input type="radio" name="middlebox" value="racetime" id="racetimeRadio" onchange="middleRadioCheck();" />
+            <button id="import-splits" onclick="importSplits();">Import Splits</button>&nbsp;
+            <button id="export-splits" onclick="stopwatch.export();">Export Splits</button>&nbsp;
+            <button id="save-pb" onclick="stopwatch.savePB();">Save PB</button>&nbsp;
+            <button id="save-bests" onclick="stopwatch.saveBest();">Save Bests</button>
+        </p>
+        <p>
             <label for="racetimeRadio">Racetime: </label>
-            <input type="text" id="race" value="dadinfinitum" />
+            <input type="text" id="race" />
             <button id="getRace" onclick="getRace();">Get Race</button>&nbsp;
             <button id="closeRace" onclick="closeRace();">Close Race</button>
-        </p>
-        <p>
-            <button id="startTimer" onclick="start();">Start Timer</button>&nbsp;
-            <button id="pauseTimer" onclick="pause();">Pause Timer</button>&nbsp;
-            <button id="resetTimer" onclick="reset();">Reset Timer</button>&nbsp;
-            Start/Pause: \ &nbsp; Reset: `
         </p>
     </div>
     <!-- JavaScript -->
