@@ -127,7 +127,6 @@ const setLayout = (chosenConsole = null) => {
     // Clearing everything out
     const allDivs = [...document.querySelectorAll('div:not(.keep)')];
     allDivs.forEach(d => {
-        console.log(d);
         d.innerHTML = d.id !== 'timer' ? '' : '1:23:45.6'
     });
     document.getElementById('background').style.display = 'block';
@@ -172,13 +171,57 @@ const setLayout = (chosenConsole = null) => {
     timer.style.height = set[chosenConsole].timer.height + 'px';
     timer.style.lineHeight = getComputedStyle(timer).height;
     timer.style.left = (20 + set[chosenConsole].camera.width) + 'px';
-    console.log(1240 - parseFloat(getComputedStyle(camera).width) - parseFloat(getComputedStyle(gamefeed).width));
     timer.style.maxWidth = (1240 - parseFloat(getComputedStyle(camera).width) - parseFloat(getComputedStyle(gamefeed).width)) + 'px';
     timer.style.width = getComputedStyle(timer).maxWidth;
 
     // More camera
     camera.style.height = getComputedStyle(timer).height;
     
+    stopwatch = new Stopwatch(
+        document.getElementById('timer'),
+        {
+            "name": "SMW - No Starworld",
+            "delay": 2200,
+            "splits": [
+                {
+                    "name": "Iggy",
+                    "pb": 193932,
+                    "seg": 193932,
+                    "best": 193265
+                },
+                {
+                    "name": "Morton",
+                    "pb": 518597,
+                    "seg": 324665,
+                    "best": 308781
+                },
+                {
+                    "name": "Ludwig",
+                    "pb": 1014955,
+                    "seg": 496358,
+                    "best": 493981
+                },
+                {
+                    "name": "Roy",
+                    "pb": 1290261,
+                    "seg": 275306,
+                    "best": 257712
+                },
+                {
+                    "name": "Wendy",
+                    "pb": 1698370,
+                    "seg": 408109,
+                    "best": 408109
+                },
+                {
+                    "name": "Bowser",
+                    "pb": 2305276,
+                    "seg": 606906,
+                    "best": 568239
+                }
+            ]
+        }
+    );
 
     // Racetime
     const racetime = document.getElementById('racetime');

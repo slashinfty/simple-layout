@@ -57,6 +57,43 @@ body {
     color: rgba(0, 0, 0, 0.55);
 }
 
+#splits {
+    border-collapse: collapse;
+    width: var(--left-width);
+    min-width: var(--left-width);
+    font-size: 1.2em;
+}
+
+thead {
+    display: block;
+    width: 100%;
+}
+
+tbody {
+    display: block;
+    width: 100%;
+}
+
+tr {
+    display: table;
+    width: 100%;
+}
+
+.longcell {
+    width: 46%;
+    min-width: 46%;
+}
+
+.shortcell {
+    width: 18%;
+    min-width: 18%;
+    text-align: right;
+}
+
+thead > tr:first-child {
+    border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+}
+
 #racetime {
     left: 10px;
     top: 250px;
