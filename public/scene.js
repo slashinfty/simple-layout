@@ -108,9 +108,7 @@ const setLayout = (chosenConsole = null) => {
     if (chosenConsole === null) chosenConsole = document.getElementById('consoles').value;
     // Clearing everything out
     const allDivs = [...document.querySelectorAll('div:not(.keep)')];
-    allDivs.forEach(d => {
-        d.innerHTML = d.id !== 'timer' ? '' : '1:23:45.6'
-    });
+    allDivs.forEach(d => d.innerHTML =  d.id !== 'timer' ? '' : '0.0');
     document.getElementById('background').style.display = 'block';
     
     // Placing game feed red block
@@ -155,6 +153,15 @@ const setLayout = (chosenConsole = null) => {
     timer.style.left = (20 + set[chosenConsole].camera.width) + 'px';
     timer.style.maxWidth = (1240 - parseFloat(getComputedStyle(camera).width) - parseFloat(getComputedStyle(gamefeed).width)) + 'px';
     timer.style.width = getComputedStyle(timer).maxWidth;
+
+    stopwatch = new Stopwatch(
+        document.getElementById('timer'),
+        {
+            "name": "",
+            "delay": 0,
+            "splits": []
+        }
+    );
 
     // More camera
     camera.style.height = getComputedStyle(timer).height;

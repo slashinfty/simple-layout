@@ -23,7 +23,7 @@ var stopwatch, splitsFile;
 const delay = ms => new Promise(res => setTimeout(res, ms));
 
 class Stopwatch {
-    constructor(display, file, path) {
+    constructor(display, file, path = null) {
         this.running = false;
         this.finished = false;
         this.display = display;
@@ -131,11 +131,11 @@ class Stopwatch {
     }
 
     load() {
+        const nameCol = document.getElementById('name');
+        const deltaCol = document.getElementById('delta');
+        const splitCol = document.getElementById('split');
+        const saveCol = document.getElementById('save');
         if (this.splits.splits.length !== 0) {
-            const nameCol = document.getElementById('name');
-            const deltaCol = document.getElementById('delta');
-            const splitCol = document.getElementById('split');
-            const saveCol = document.getElementById('save');
             nameCol.innerHTML = this.splits.name;
             deltaCol.innerHTML = 'Delta';
             splitCol.innerHTML = 'Split';
@@ -149,14 +149,19 @@ class Stopwatch {
                 const saveColContent = split.seg === null ? '&nbsp;' : this.format(this.msToArray(split.seg - split.best));
                 saveCol.innerHTML += `<br><span id="save` + count + `">` + saveColContent + `</span>`;
             });
-            }
+        } else {
+            nameCol.innerHTML = '';
+            deltaCol.innerHTML = '';
+            splitCol.innerHTML = '';
+            saveCol.innerHTML = '';
+        }
         const racetime = document.getElementById('racetime');
         racetime.style.top = (10 + parseFloat(getComputedStyle(document.getElementById('splits')).top) + parseFloat(getComputedStyle(split).height)) + 'px';
         racetime.style.height = (parseFloat(getComputedStyle(document.getElementById('nincid')).top) - parseFloat(getComputedStyle(racetime).top) - 10) + 'px';
     }
 
     export() {
-        if (this.running) return;
+        if (this.running || this.path === null) return;
         fs.writeFileSync(this.path, JSON.stringify(this.splits));
         alert('Saved splits at ' + this.path);
     }
