@@ -67,13 +67,12 @@ class Stopwatch {
             // Get time save
             const pbSeg = this.splits.splits[this.segment - 1].seg;
             let save;
-            if (pbSeg === null || pbSeg === undefined) save = '---';
-            else save = seg <= pbSeg ? '-' + this.format(this.msToArray(pbSeg - seg)) : '+' + this.format(this.msToArray(seg - pbSeg));
             const lastTime = this.segment === 1 ? 0 : this.currentSplits[this.segment - 2];
             const seg = ms - lastTime;
             this.currentSegments.push(seg);
+            if (pbSeg === null || pbSeg === undefined) save = '---';
+            else save = seg <= pbSeg ? '-' + this.format(this.msToArray(pbSeg - seg)) : '+' + this.format(this.msToArray(seg - pbSeg));
             document.getElementById('save' + this.segment).innerText = save;
-
             if (this.segment === this.splits.splits.length) {
                 this.finished = true;
                 this.stop();
