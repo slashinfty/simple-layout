@@ -67,14 +67,13 @@ class Stopwatch {
             // Get time save
             const pbSeg = this.splits.splits[this.segment - 1].seg;
             let save;
-            if (pbSeg === null) save = '---';
-            else {
-                const lastTime = this.segment === 1 ? 0 : this.currentSplits[this.segment - 2];
-                const seg = ms - lastTime;
-                this.currentSegments.push(seg);
-                save = seg <= pbSeg ? '-' + this.format(this.msToArray(pbSeg - seg)) : '+' + this.format(this.msToArray(seg - pbSeg));
-            }
+            if (pbSeg === null || pbSeg === undefined) save = '---';
+            else save = seg <= pbSeg ? '-' + this.format(this.msToArray(pbSeg - seg)) : '+' + this.format(this.msToArray(seg - pbSeg));
+            const lastTime = this.segment === 1 ? 0 : this.currentSplits[this.segment - 2];
+            const seg = ms - lastTime;
+            this.currentSegments.push(seg);
             document.getElementById('save' + this.segment).innerText = save;
+
             if (this.segment === this.splits.splits.length) {
                 this.finished = true;
                 this.stop();
@@ -89,7 +88,7 @@ class Stopwatch {
     }
 
     saveBest() {
-        this.splits.splits.forEach((s, i) => s.best = this.currentSegments[i] < s.best || s.best === null ? this.currentSegments[i] : s.best);
+        this.splits.splits.forEach((s, i) => s.best = this.currentSegments[i] < s.best || s.best === null || s.best === undefined ? this.currentSegments[i] : s.best);
     }
 
     savePB() {
@@ -97,7 +96,7 @@ class Stopwatch {
         this.splits.splits.forEach((s, i) => {
             s.pb = this.currentSplits[i];
             s.seg = this.currentSegments[i];
-            if (s.seg < s.best || s.best === null) s.best = s.seg;
+            if (s.seg < s.best || s.best === null || s.best === undefined) s.best = s.seg;
         });
     }
     
