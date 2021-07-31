@@ -50,7 +50,7 @@ class Stopwatch {
         if (this.times.every(t => t === 0)) await delay(this.delay);
         if (!this.time) this.time = performance.now();
         if (!this.running) {
-            this.segment++;
+            if (this.segment === 0) this.segment++;
             this.running = true;
             requestAnimationFrame(this.step.bind(this));
         } else {
